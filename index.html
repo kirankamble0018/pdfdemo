@@ -1,108 +1,448 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <!-- html2pdf CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PDF Generator</title>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            text-align: center;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        text-align: center;
+      }
 
-        .container {
-            position: relative;
-            max-width: 700px;
-            margin: auto;
-            border-radius: 7px;
-            background-color: #f0f0f0;
-            padding: 20px;
-        }
+      .container {
+        position: relative;
+        max-width: 700px;
+        margin: auto;
+        border-radius: 7px;
+        background-color: white;
+        padding: 20px;
+      }
 
-        #previewBtn {
-            background-color: #4caf50;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
+      #title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
 
-        #downloadBtn {
-            background-color: #4caf50;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        /* margin-bottom: 20px; */
+      }
 
-        h2 {
-            text-align: center;
-            color: #24650b;
-        }
+      th,
+      td {
+        border: 0.5px solid #504c4c;
+        text-align: left;
+        padding: 8px;
+        font-size: 12px;
+      }
+
+      th {
+        background-color: #d7dbd7;
+        color: rgb(26, 26, 26);
+      }
+
+      #downloadBtn {
+        background-color: #d7dbd7;
+        border: none;
+        color: rgb(26, 26, 26);
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-top: 10px;
+        cursor: pointer;
+      }
+
+      
+      h2 {
+        text-align: center;
+        color: #24650b;
+      }
     </style>
-</head>
+    
+  </head>
 
-<body>
+  <body>
     <div class="container" id="makepdf">
-        <h2>विद्यार्थिनीच्या वसतीगृहात मासिक पाळी नोंदवही आहे का? मासिक पाळी नोंदवहीमध्ये आढळलेल्या त्रुटी कोणकोणत्या आहेत?</h2>
-        <ul>
-            <li>
-                <h4>
-                    We are going to generate a pdf 
-                    from the area inside the box
-                </h4>
-            </li>
-            <li>
-                <h4>
-                    This is an example of generating 
-                    pdf from HTML during runtime
-                </h4>
-            </li>
-        </ul>
+      <div id="title">शासकीय वसतिगृहे तपासणी पक्षीक अहवाल</div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 50px; text-align: center">अ.क्र.</th>
+            <th style="width: 50%; text-align: center">तपासणीचे मुद्दे</th>
+            <th style="width: 50%; text-align: center">शेरा</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center">१.</td>
+            <td>शासकीय वसतिगृहाचे नाव</td>
+            <td id="vastigruhacheNav"></td>
+          </tr>
+          <tr>
+            <td style="text-align: center">२.</td>
+            <td>वसतीगृहाचा संपूर्ण पत्ता</td>
+            <td id="vastigruhachaPatta"></td>
+          </tr>
+          <tr>
+            <td style="text-align: center">३.</td>
+            <td>भेट देणाऱ्या अधिकारी / कर्मचारी यांचे नाव <br> भेटीची तारीख आणि वेळ</td>
+            <td >
+              <div id=adhikaryacheNav style="padding-bottom:5px">
+              </div>
+              <div id=bhetichiTarikhAndVel>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">४.</td>
+            <td>वसतिगृहाचे गृहपाल / अधिक्षकांचे नाव</td>
+            <td id=vastigruhachyaAdhikshkacheNav></td>
+          </tr>
+          <tr>
+            <td style="text-align: center">५.</td>
+            <td>गृहपाल वसतिगृहात निवासी राहतात का? <br> मूळ आस्थापनेवरील गृहपाल पदाचा / अतिरिक्त कार्यभार असलेल्या वसतिगृह ठिकाणांच्या आठवड्यातील वार नमुद करावे</td>
+            <td id=vgruhpalNivasiRahtat></td>
+          </tr>
+          <tr>
+            <td style="text-align: center">६.</td>
+            <td>मान्य संख्या व इमारत क्षमता</td>
+            <td >
+              <div id=manyaSankhya style="padding-bottom:5px">
+                मान्य संख्या : 
+              </div>
+              <div id=emaratSkhamata>
+                इमारत क्षमता : 
+              </div>
+            </td>
+            
+          </tr>
+          <tr>
+            <td style="text-align: center">७.</td>
+            <td>प्रवेशित / पटावरील विद्यार्थी संख्या</td>
+            <td id="praveshitVidyarthiSankhya"></td>
+          </tr>
+          <tr>
+            <td style="text-align: center">८.</td>
+            <td>भेटीच्या वेळी प्रत्यक्ष हजर विद्यार्थी संख्या</td>
+            <td id="pratekshaHajarSankhya"></td>
+          </tr>
+          <tr>
+            <td style="text-align: center">९.</td>
+            <td>विद्यार्थांचे हजेरीपुस्तक अद्यावत आहे काय?</td>
+            <td id="selectedOptionForHajeripustak"></td>
+          </tr>
+          <tr>
+            <td style="text-align: center">१०.</td>
+            <td>भोजन व्यवस्था खात्यामार्फत आहे की ठेकेदार पद्धतीने?</td>
+            <td id="selectedOptionForBhojanBy"></td>
+          </tr>
+          <tr>
+            <td style="text-align: center">११.</td>
+            <td>भोजन व्यवस्था ठेकेदार पद्धतीने असल्यास ठेकेधारक संस्थेचे नाव </br> ठेकेदाराचे नाव</td>
+            <td>ठेकेधारक संस्थेचे नाव :  </br> ठेकेदाराचे नाव : </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">१२.</td>
+            <td>कोणत्या तारखेपासून ठेकेदार जेवण पुरवित आहेत?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">१३.</td>
+            <td>भोजन व्यवस्था खात्यामार्फत असल्यास आहार खर्च धान्यासाठी रजिस्टर अद्यावत आहे काय? </br>
+              ब. एका महिन्याकरिता पुरेल एवढा धान्यसाठा आहे काय?</br>
+              क. विहित केल्याप्रमाणे धान्य वापरले जाते काय?</td>
+            <td>Value </br> </br>value 4 </br></br> val 4</td>
+          </tr>
+          <tr>
+            <td style="text-align: center">१४.</td>
+            <td>जेवण वेळेवर व पोटभर दिले जाते का?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">१५.</td>
+            <td>भोजन समिती स्थापन केलेली आहे का?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">१६.</td>
+            <td>भोजनसंबंधी भोजन समितीचे अभिप्राय काय आहेत?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">१७.</td>
+            <td>मिठान्न भोजन कोणत्या दिवशी दिले जाते?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">१८.</td>
+            <td>जेवणाबाबत विद्यार्थांच्या काही तक्रारी आहेत का?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">१९.</td>
+            <td>महिन्याचा निर्वाह भत्ता कोणत्या तारखेस विद्यार्थ्यांच्या बँक खात्यात जमा केला आहे? (ती प्रत्यक्ष तारीख द्यावी.)</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">२०.</td>
+            <td>भेटीच्या दिवसापर्यंत निर्वाह भत्ता दिला नसल्यास न दिल्याची कारणे व केव्हा देणार</td>
+            <td>कारणे :  </br> केव्हा देणार : </td>
+          </tr>
+           <tr>
+            <td style="text-align: center">२१.</td>
+            <td>विद्यार्थाना देय असलेले सर्व शैक्षणिक साहित्य पूरविण्यात आले आहे काय? नसल्यास कारणे</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">२२.</td>
+            <td>शैक्षणिक साहित्य पूरविण्यासंबंधित विद्यार्थांच्या काही तक्रारी आहेत का?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">२३.</td>
+            <td>पिण्याच्या पाण्याची पुरेशी व्यवस्था आहे का? नसल्यास कारणे व उपाय</td>
+            <td>कारणे : </br> उपाय :  </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">२४.</td>
+            <td>विद्यार्थांच्या प्रत्येक खोलीत विजेची पुरेशी व्यवस्था आहे का? नसल्यास केव्हा पुरवणार?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">२५.</td>
+            <td>वसतिगृहामध्ये वाचन प्रेरणा उपक्रम राबविला आहे त्याबाबतचा </br>विद्यार्थी / विद्यार्थिनीचा अभिप्राय. (स्वतंत्र्य देण्यात यावा.)</td>
+            <td>विद्यार्थी अभिप्राय : </br> विद्यार्थिनीचा अभिप्राय : </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">२६.</td>
+            <td>स्नानगृहात, स्वच्छतागृहात पुरेशी विद्युत व पाण्याची व्यवस्था आहे का? नसल्यास केव्हा पुरवणार?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">२७.</td>
+            <td>स्वच्छतेसाठी बाह्यस्रोत कर्मचारी नेमण्यात आले आहेत का?</td>
+            <td>मंजूर संख्या : </br> प्रत्यक्ष कार्यरत संख्या :</td>
+          </tr>
+          <tr>
+            <td style="text-align: center">२८.</td>
+            <td>बाह्यस्रोत सुरक्षा रक्षक व्यवस्था</td>
+            <td>मंजूर संख्या : </br> प्रत्यक्ष कार्यरत संख्या :</td>
+          </tr>
+          <tr>
+            <td style="text-align: center">२९.</td>
+            <td>शासकीय कर्मचारी वर्ग-3 व वर्ग-4 सद्यस्थितीबाबत माहिती</td>
+            <td>Value </td>
+          </tr> 
+          <tr>
+            <td style="text-align: center">३०.</td>
+            <td>विद्यार्थिनीच्या वसतीगृहात मासिक पाळी नोंदवही आहे का? मासिक पाळी नोंदवहीमध्ये आढळलेल्या त्रुटी कोणकोणत्या आहेत?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">३१.</td>
+            <td>स्नानघर व स्वच्छतागृहाच्या स्वच्छतेसंबंधी विद्यार्थांच्या काही तक्रारी आहेत का?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">३२.</td>
+            <td>स्वच्छतेसाठी मशीनचा पुरवठा झाला आहे का?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">३३.</td>
+            <td>वसतीगृहातील स्वच्छतेसाठी मशीनचा वापर होतो का?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">३४.</td>
+            <td>बाह्यस्रोत कर्मचारी हजेरी प्रत्यक्ष</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">३५.</td>
+            <td>धान्यसाठा रजिस्टरप्रमाणे मालाचा तपशील </br>
+              धान्याचे नाव (शासकीय भोजन पध्दत)(स्वतंत्र कागदावरील नोंद घ्यावी.)</td>
+            <td>
+              <table>
+                <tr >
+                  <td style="text-align: center; border-left: 0cm; border-top: 0cm;">रजिस्टर प्रमाणे वजन कि.ग्रॅम</td>
+                  <td style="text-align: center; border-top: 0cm;">प्रत्यक्ष शिल्लक साठा कि.ग्रॅम</td>
+                  <td style="text-align: center; border-right: 0cm; border-top: 0cm;"> तफावत (+)(-) </td>
+                </tr>
+                <tr>
+                  <td style="text-align: center; border-left: 0cm; border-bottom: 0cm;">Inner 4</td>
+                  <td style="text-align: center; border-bottom: 0cm;">Inner 5</td>
+                  <td style="text-align: center; border-right: 0cm; border-bottom: 0cm;">Inner 6</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">३६.</td>
+            <td>वसतीगृहाचा परिसर स्वच्छ व आल्हाददायक आहे का?</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">३७.</td>
+            <td>वसतीगृहाच्या कामकाजात आधाळलेल्या महत्वाच्या उणीवा</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">३८.</td>
+            <td>आदर्श वसतीगृह करण्याबाबत सोई-सुविधांचा आढावा</td>
+            <td>Value </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">३९.</td>
+            <td>संवाद उपक्रम राबिवलेला आहे, त्यातील उणीवा व सुधारणा</td>
+            <td>उणीवा :  </br> सुधारणा : </td>
+          </tr>
 
-        <button id="previewBtn" onclick="previewPDF()">Preview PDF</button>
-        <button id="downloadBtn" style="display:none;" onclick="downloadPDF()">Download PDF</button>
+
+
+
+          
+          
+        </tbody>
+      </table>
+
+      <table >
+       
+        <tbody >
+          <tr style="background-color: white;">
+            <td style="width: 60px; text-align: center;" >४०.</td>
+              <td style="width: 94%; text-align: center;">
+                <div>
+                  <strong style=" text-align: center; ">वसतीगृहाच्या कामकाजासंबंधी अभिप्राय </br></br></strong>
+                </div>
+                <div style="text-align: left; ">
+                  मराठी भाषा ही इंडो-युरोपीय भाषाकुळातील एक भाषा आहे. मराठी ही भारताच्या २२ अधिकृत भाषांपैकी एक आहे. मराठी महाराष्ट्र राज्याची अधिकृत तर गोवा राज्याची सहअधिकृत भाषा आहे. २०११ च्या जनगणनेनुसार, भारतात मराठी भाषकांची एकूण लोकसंख्या सुमारे १४ कोटी आहे. मराठी मातृभाषा असणाऱ्या लोकांच्या संख्येनुसार मराठी ही जगातील दहावी व भारतातील तिसरी भाषा आहे.
+                </br></br></br></br></br>
+                </div>
+              </td>
+          </tr>
+          </tbody>
+          </table>
+          <div style="height: 50px;"></div>
+          <table>
+       
+            <tbody >
+              <tr style="background-color: white;">
+                <td style="width: 50%; text-align: left;  border:none; padding-left:30px">  गृहपाल यांची स्वाक्षरी  </td>
+                  <td style="width: 50%; text-align: left;  border:none ">
+               
+                    <div style="text-align: left; ">
+                      तपासणी अधिकारी / कर्मचारी
+                    </div>
+                    <div style="text-align: left; ">
+                      यांचे नाव :
+                    </div>
+                    <div style="text-align: left; ">
+                      पदनाम :
+                    </div>
+                    <div style="text-align: left; ">
+                      स्वाक्षरी -
+                    </div>
+                  </td>
+              </tr>
+              </tbody>
+              </table>
+
+      <button id="downloadBtn" onclick="downloadPDF()">Download PDF</button>
+      <!-- <button id="downloadBtn" onclick="downloadPDF()">Download PDF</button> -->
     </div>
 
     <script>
-        function previewPDF() {
-            var element = document.getElementById("makepdf");
-            html2pdf(element, {
-                margin: 10,
-                filename: 'generated-pdf-preview',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            }).then(function () {
-                document.getElementById('downloadBtn').style.display = 'block';
-            });
-        }
+      // function previewPDF() {
 
-        function downloadPDF() {
-            var element = document.getElementById("makepdf");
-            html2pdf(element, {
-                margin: 10,
-                filename: 'generated-pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            }).save();
-        }
+      //   var element = document.getElementById("makepdf");
+      //   html2pdf(element, {
+      //     margin: 10,
+      //     filename: "generated-pdf-preview",
+      //     image: { type: "jpeg", quality: 0.98 },
+      //     html2canvas: { scale: 2 },
+      //     jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      //   }).then(function () {
+      //     document.getElementById("downloadBtn").style.display = "block";
+      //   });
+      // }
+
+      function downloadPDF() {
+        
+        var downloadBtn = document.getElementById('downloadBtn');
+        downloadBtn.style.display = 'none';
+
+        var element = document.getElementById("makepdf");
+        html2pdf(element, {
+          margin: 20,
+          filename: "form-pdf",
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2 },
+          pagebreak : {mode : ['avoid-all']},
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        }).save().then(function () {
+          downloadBtn.style.display = 'inline-block';
+        });;
+
+        
+       
+      }
+  
+        document.addEventListener("DOMContentLoaded", function() {
+            // Function to get query parameters from the URL
+            function getQueryParams() {
+                var queryParams = {};
+                var queryString = window.location.search.substring(1);
+                var pairs = queryString.split('&');
+
+                for (var i = 0; i < pairs.length; i++) {
+                    var pair = pairs[i].split('=');
+                    queryParams[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+                }
+
+                return queryParams;
+            }
+
+            // Function to display JSON data on the HTML page
+            function displayJsonData(data) {
+              
+                // document.getElementById("vastigruhacheNav").innerHTML = data["vastigruhacheNav"];
+                // document.getElementById("adhikaryacheNav").innerHTML = data["adhikaryacheNav"];
+                
+
+                for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    // Get the HTML element with the corresponding ID
+                    var element = document.getElementById(key);
+                    
+                    // Check if the element exists before setting its innerHTML
+                    if (element) {
+                      let text = element.innerHTML
+                        element.innerHTML =  text + data[key];
+                    }
+                }
+            }
+            }
+
+            // Get the JSON data from the URL
+            var queryParams = getQueryParams();
+            var jsonData = queryParams.json ? JSON.parse(decodeURIComponent(queryParams.json)) : {};
+            console.log(queryParams)
+            // Call the function with the retrieved JSON data
+            displayJsonData(jsonData);
+        });
+ 
     </script>
-</body>
+  </body>
 </html>
